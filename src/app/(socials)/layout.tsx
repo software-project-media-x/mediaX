@@ -6,7 +6,7 @@ const AuthLayout = async (
   return (
     <>
     <Navbar/>
-      <main className="flex items-center justify-center min-h-screen bg-[url('/search.webp')] bg-no-repeat bg-cover">
+      <main className="min-h-screen  pt-[55px]">
           {children}
       </main>
     </>

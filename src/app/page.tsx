@@ -23,7 +23,7 @@ export default function Home() {
         )}>X</p>
         </h1>
         <div>
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-row gap-4">
           <LoginButton  asChild>
             <Button variant="secondary" size="lg">
               Sign in
