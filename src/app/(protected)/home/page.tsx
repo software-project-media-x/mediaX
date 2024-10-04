@@ -15,7 +15,7 @@ const font = Poppins({
   weight: ["600"]
 })
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const [keyword, setKeyword] = useState('');
   const [date, setDate] = useState(''); 
@@ -50,4 +50,4 @@ const page = () => {
   )
 }
 
-export default page;
+export default Page;

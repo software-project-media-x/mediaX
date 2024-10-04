@@ -10,7 +10,7 @@ export default  function EmotionDetector({ description,title }: { description: s
     const response = await fetch(
       "https://api-inference.huggingface.co/models/facebook/bart-large-mnli",
       {
-        headers: { Authorization: "Bearer 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" },
+        headers: { Authorization: "Bearer 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" },
         method: "POST",
         body: JSON.stringify({"inputs": text,
         "parameters": {"candidate_labels": [ "politics",

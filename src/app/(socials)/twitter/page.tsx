@@ -1,13 +1,13 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { FaYoutube, FaSpinner, FaTwitter } from 'react-icons/fa';
+import { FaTwitter, FaSpinner } from 'react-icons/fa';
 import EmotionDetector from '@/components/tool/EmotionDetector';
 import CategoryDetector from '@/components/tool/CategoryDetector';
 import axios from 'axios';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-const TwitterPage = () => {
+const TwitterPageContent = () => {
   const searchParams = useSearchParams();
   const keyword = searchParams.get('q');
   const dateString = searchParams.get('date'); // Assuming the date is received in the format "2024-02-25T23:29"
@@ -19,8 +19,7 @@ const TwitterPage = () => {
   const searchTweets = async () => {
     setIsLoading(true);
     try {
-      // Format the date string to "2024-02-25"
-
+      // Format the date string to "YYYY-MM-DD"
       const response = await axios.get(`https://twitter154.p.rapidapi.com/search/search`, {
         params: {
           query: keyword,
@@ -37,7 +36,7 @@ const TwitterPage = () => {
         },
       });
       const tweetData = response.data.results;
-      const tweetList = tweetData.slice(0, 5).map((tweet:any) => ({
+      const tweetList = tweetData.slice(0, 5).map((tweet: any) => ({
         creation_date: tweet.creation_date,
         text: tweet.text,
       }));
@@ -56,13 +55,12 @@ const TwitterPage = () => {
     }
   }, [keyword]);
 
-
-
   return (
     <div className='p-8'>
       <h1 className='text-4xl font-bold flex flex-row items-center justify-center gap-4'>
         <FaTwitter className='w-10 h-10 text-blue-700' />
-        <p>Twitter Search</p>{formattedDate}
+        <p>Twitter Search</p>
+        {formattedDate}
       </h1>
       <div className='text-xl flex flex-row gap-1'>
         <p className='font-bold'>Searched Keyword:</p>
@@ -74,21 +72,31 @@ const TwitterPage = () => {
         </div>
       ) : (
         <div className='space-y-4'>
-          {(tweets as {
-            creation_date: any; text: string}[]).map((tweet, index) => (
+          {(tweets as { creation_date: any; text: string }[]).map((tweet, index) => (
             <Card key={index} className='p-4 gap-4 bg-gray-300'>
               <div>
-              <div className='flex flex-row'><p className='font-bold'>Creation Date:</p> <p>{tweet.creation_date}</p></div>
-              <div className='flex flex-row'><p className='font-bold'>Content:</p> <p>{tweet.text}</p></div>
+                <div className='flex flex-row'>
+                  <p className='font-bold'>Creation Date:</p> <p>{tweet.creation_date}</p>
+                </div>
+                <div className='flex flex-row'>
+                  <p className='font-bold'>Content:</p> <p>{tweet.text}</p>
+                </div>
               </div>
-
               <EmotionDetector description={tweet.text} title={tweet.text} />
-              <CategoryDetector description={tweet.text} title={tweet.text}/>
+              <CategoryDetector description={tweet.text} title={tweet.text} />
             </Card>
           ))}
         </div>
       )}
     </div>
+  );
+};
+
+const TwitterPage = () => {
+  return (
+    <Suspense fallback={<div>Loading Twitter page...</div>}>
+      <TwitterPageContent />
+    </Suspense>
   );
 };
 
